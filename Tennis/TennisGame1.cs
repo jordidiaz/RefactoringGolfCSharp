@@ -9,6 +9,10 @@ namespace Tennis
         private const string FifteenAll = "Fifteen-All";
         private const string ThirtyAll = "Thirty-All";
         private const string Deuce = "Deuce";
+        private const string AdvantagePlayer1 = "Advantage player1";
+        private const string AdvantagePlayer2 = "Advantage player2";
+        private const string WinForPlayer1 = "Win for player1";
+        private const string WinForPlayer2 = "Win for player2";
 
         private int _player1Score;
         private int _player2Score;
@@ -37,16 +41,19 @@ namespace Tennis
             else if (_player1Score >= 4 || _player2Score >= 4)
             {
                 var minusResult = _player1Score - _player2Score;
-                if (minusResult == 1) score = "Advantage player1";
-                else if (minusResult == -1) score = "Advantage player2";
-                else if (minusResult >= 2) score = "Win for player1";
-                else score = "Win for player2";
+                score = minusResult switch
+                {
+                    1 => AdvantagePlayer1,
+                    -1 => AdvantagePlayer2,
+                    >= 2 => WinForPlayer1,
+                    _ => WinForPlayer2
+                };
             }
             else
             {
                 for (var i = 1; i < 3; i++)
                 {
-                    var tempScore = 0;
+                    int tempScore;
                     if (i == 1) tempScore = _player1Score;
                     else { score += "-"; tempScore = _player2Score; }
                     switch (tempScore)
