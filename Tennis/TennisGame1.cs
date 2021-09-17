@@ -1,13 +1,21 @@
+using System.Collections.Generic;
+
 namespace Tennis
 {
     class TennisGame1 : ITennisGame
     {
+        private const string Player1 = "player1";
+        private const string LoveAll = "Love-All";
+        private const string FifteenAll = "Fifteen-All";
+        private const string ThirtyAll = "Thirty-All";
+        private const string Deuce = "Deuce";
+
         private int _player1Score;
         private int _player2Score;
 
         public void WonPoint(string playerName)
         {
-            if (playerName == "player1")
+            if (playerName == Player1)
                 _player1Score += 1;
             else
                 _player2Score += 1;
@@ -15,25 +23,16 @@ namespace Tennis
 
         public string GetScore()
         {
-            string score = "";
+            var score = "";
             if (_player1Score == _player2Score)
             {
-                switch (_player1Score)
+                score = _player1Score switch
                 {
-                    case 0:
-                        score = "Love-All";
-                        break;
-                    case 1:
-                        score = "Fifteen-All";
-                        break;
-                    case 2:
-                        score = "Thirty-All";
-                        break;
-                    default:
-                        score = "Deuce";
-                        break;
-
-                }
+                    0 => LoveAll,
+                    1 => FifteenAll,
+                    2 => ThirtyAll,
+                    _ => Deuce
+                };
             }
             else if (_player1Score >= 4 || _player2Score >= 4)
             {
