@@ -13,6 +13,10 @@ namespace Tennis
         private const string AdvantagePlayer2 = "Advantage player2";
         private const string WinForPlayer1 = "Win for player1";
         private const string WinForPlayer2 = "Win for player2";
+        private const string Love = "Love";
+        private const string Fifteen = "Fifteen";
+        private const string Thirty = "Thirty";
+        private const string Forty = "Forty";
 
         private int _player1Score;
         private int _player2Score;
@@ -51,28 +55,31 @@ namespace Tennis
             }
             else
             {
-                for (var i = 1; i < 3; i++)
-                {
-                    int tempScore;
-                    if (i == 1) tempScore = _player1Score;
-                    else { score += "-"; tempScore = _player2Score; }
-                    switch (tempScore)
-                    {
-                        case 0:
-                            score += "Love";
-                            break;
-                        case 1:
-                            score += "Fifteen";
-                            break;
-                        case 2:
-                            score += "Thirty";
-                            break;
-                        case 3:
-                            score += "Forty";
-                            break;
-                    }
-                }
+                score = GetScoreAsString(_player1Score, score);
+                score += "-";
+                score = GetScoreAsString(_player2Score, score);
             }
+            return score;
+        }
+
+        private static string GetScoreAsString(int tempScore, string score)
+        {
+            switch (tempScore)
+            {
+                case 0:
+                    score += Love;
+                    break;
+                case 1:
+                    score += Fifteen;
+                    break;
+                case 2:
+                    score += Thirty;
+                    break;
+                case 3:
+                    score += Forty;
+                    break;
+            }
+
             return score;
         }
     }
