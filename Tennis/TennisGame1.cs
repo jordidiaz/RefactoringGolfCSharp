@@ -1,3 +1,5 @@
+using System;
+
 namespace Tennis
 {
     class TennisGame1 : ITennisGame
@@ -29,56 +31,84 @@ namespace Tennis
 
         public string GetScore()
         {
-            var score = "";
-            if (_player1Score == _player2Score)
+            if (IsGameTied())
             {
-                score = _player1Score switch
-                {
-                    0 => LoveAll,
-                    1 => FifteenAll,
-                    2 => ThirtyAll,
-                    _ => Deuce
-                };
+                return  DisplayTiedScore();
             }
-            else if (_player1Score >= 4 || _player2Score >= 4)
+            if (IsAdvantageScore())
             {
-                var minusResult = _player1Score - _player2Score;
-                score = minusResult switch
-                {
-                    1 => AdvantagePlayer1,
-                    -1 => AdvantagePlayer2,
-                    >= 2 => WinForPlayer1,
-                    _ => WinForPlayer2
-                };
+                return DisplayAdvantageScore();
             }
-            else
+            if (IsWinScore())
             {
-                score = GetScoreAsString(_player1Score, score);
-                score += "-";
-                score = GetScoreAsString(_player2Score, score);
+                return DisplayMaxScore();
             }
-            return score;
+            
+            return DisplayRegularScore();
         }
 
-        private static string GetScoreAsString(int tempScore, string score)
+        private string DisplayRegularScore()
         {
-            switch (tempScore)
-            {
-                case 0:
-                    score += Love;
-                    break;
-                case 1:
-                    score += Fifteen;
-                    break;
-                case 2:
-                    score += Thirty;
-                    break;
-                case 3:
-                    score += Forty;
-                    break;
-            }
+            return $"{GetScoreAsString(_player1Score)}-{GetScoreAsString(_player2Score)}";
+        }
 
-            return score;
+        private string DisplayAdvantageScore()
+        {
+            var minusResult = _player1Score - _player2Score;
+
+            return minusResult switch
+            {
+                1 => AdvantagePlayer1,
+                _ => AdvantagePlayer2
+            };
+        }       
+        
+        private string DisplayMaxScore()
+        {
+            var minusResult = _player1Score - _player2Score;
+
+            return minusResult switch
+            {
+                >= 2 => WinForPlayer1,
+                _ => WinForPlayer2
+            };
+        }
+
+        private string DisplayTiedScore()
+        {
+            return _player1Score switch
+            {
+                0 => LoveAll,
+                1 => FifteenAll,
+                2 => ThirtyAll,
+                _ => Deuce
+            };
+        }
+
+        private bool IsGameTied()
+        {
+            return _player1Score == _player2Score;
+        }
+
+        private bool IsAdvantageScore()
+        {
+            return (_player1Score >= 4 || _player2Score >= 4) && (Math.Abs(_player1Score - _player2Score) == 1);
+        }
+        
+        private bool IsWinScore()
+        {
+            return (_player1Score >= 4 || _player2Score >= 4) && (Math.Abs(_player1Score - _player2Score) > 1);
+        }
+
+        private static string GetScoreAsString(int tempScore)
+        {
+            return tempScore switch
+            {
+                0 => Love,
+                1 => Fifteen,
+                2 => Thirty,
+                _ => Forty
+            };
         }
     }
 }
