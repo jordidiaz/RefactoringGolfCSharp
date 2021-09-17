@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Tennis
 {
     class TennisGame1 : ITennisGame
